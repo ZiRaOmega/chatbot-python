@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Conrad</title>
+</head>
+<body>
+    <h1>Chattez avec notre bot</h1>
+    <div>
+        <input type="text" id="userInput" placeholder="Demandez-moi n'importe quoi...">
+        <button onclick="sendMessage()">Envoyer</button>
+    </div>
+    <div id="chatOutput"></div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ query: userInput })
+            });
+            const data = await response.json();
+            const chatOutput = document.getElementById("chatOutput");
+            chatOutput.innerHTML += `<p><strong>Vous:</strong> ${userInput}</p>`;
+            chatOutput.innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
+            chatOutput.scrollTop = chatOutput.scrollHeight;  // Auto-scroll to the bottom
+        }
+    </script>
+</body>
+</html>
